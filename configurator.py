@@ -4,7 +4,6 @@ import pywebio
 
 import json
 import os
-import sys
 import uuid
 
 class Schemas():
@@ -1899,13 +1898,13 @@ class GNS3_GUI(Schemas):
         if shema_number == "Eigenes Shema":
             shema = input(label='Bitte absoluten Pfad zur Json Datei eingeben')
         else:
-            if   shema_number == 3:
+            if   shema_number == "3":
                 shema = self.appliance_v3
-            elif shema_number == 4:
+            elif shema_number == "4":
                 shema = self.appliance_v4
-            elif shema_number == 5:
+            elif shema_number == "5":
                 shema = self.appliance_v5
-            elif shema_number == 6:
+            elif shema_number == "6":
                 shema = self.appliance_v6
 
 
@@ -1919,8 +1918,8 @@ class GNS3_GUI(Schemas):
         # TODO check if file exists
         with open(os.path.join('appliances', appliance_name + '.gns3a'), 'w+') as f:
             appliance = {}
-            #appliance = self.ask_from_schema(schema)
-            #appliance['qemu'] = self.ask_from_schema(schema['properties']['qemu'])
+            appliance = self.ask_from_schema(schema)
+            appliance['qemu'] = self.ask_from_schema(schema['properties']['qemu'])
 
             appliance['images'] = []
             files = []
@@ -1934,7 +1933,7 @@ class GNS3_GUI(Schemas):
                 version = {'images': {}}
                 version['name'] = input('Appliance version name')
                 for disk in ['hda_disk_image', 'hdb_disk_image', 'hdc_disk_image', 'hdd_disk_image', 'cdrom_image', 'initrd_image', 'kernel_image']:
-                    img = file_upload(label=f"Image for {disk}", required=False)
+                    img = input(label=f"Image for {disk}", required=False)
                     if img:
                         version['images'][disk] = img.get("filename")
 
@@ -1946,9 +1945,9 @@ class GNS3_GUI(Schemas):
     def yesno(self,question):
         while True:
             answer = select(label=question,options=["yes","no"])
-            if answer in ['y', 'Y', 'yes']:
+            if answer in ['yes']:
                 return True
-            if answer in ['n', 'N', 'no']:
+            if answer in ['no']:
                 return False
 
     def ask_from_schema(self,schema):
