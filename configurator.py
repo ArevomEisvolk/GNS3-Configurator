@@ -1,4 +1,4 @@
-from pywebio.input import file_upload, input, checkbox ,select , FLOAT, NUMBER, TEXT
+from pywebio.input import input, checkbox, select, NUMBER, TEXT
 from pywebio.output import put_text, put_button
 import pywebio
 
@@ -12,6 +12,11 @@ class GNS3_GUI():
     pywebio.session.set_env(title='GNS3 File Configurator')
 
     def __init__(self) -> None:
+        
+        schema_urls = ["https://raw.githubusercontent.com/GNS3/gns3-registry/master/schemas/appliance_v3.json","https://raw.githubusercontent.com/GNS3/gns3-registry/master/schemas/appliance_v4.json","https://raw.githubusercontent.com/GNS3/gns3-registry/master/schemas/appliance_v5.json","https://raw.githubusercontent.com/GNS3/gns3-registry/master/schemas/appliance_v6.json"]
+        if os.path.isdir('schemas') == False:
+            os.mkdir(os.path.join('schemas'))
+            put_button("Download Schema Files", onclick=lambda: [os.popen(f"wget --directory-prefix=schemas {url}") for url in schema_urls], color='success', outline=True)
 
         shema_number = "".join(checkbox(label="Bitte gewünschtes Shema auswählen",options=["Eigenes Shema","3","4","5","6"]))
 
