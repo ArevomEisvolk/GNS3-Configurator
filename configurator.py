@@ -5,7 +5,7 @@ import pywebio
 import json
 import os
 import uuid
-
+import sys
 
 class GNS3_GUI():
 
@@ -60,6 +60,7 @@ class GNS3_GUI():
                 appliance['versions'].append(version)
 
             json.dump(appliance, f, indent=4)
+            sys.exit()
 
 
     def yesno(self,question):
@@ -85,11 +86,12 @@ class GNS3_GUI():
                     required = True
 
                 if 'enum' in val:
-                  result = select(label=val['title'],options=val['enum'],required=required)
-
+                    result = select(label=val['title'],options=val['enum']+["None"],required=required)
+                    if result == "None":
+                        result = None
                 elif "user_input" in val:
-                  if val['user_input'] != "ignore":
-                    result = val['user_input']
+                    if val['user_input'] != "ignore":
+                        result = val['user_input']
 
                 elif val['type'] == "integer":
                     result = input(val['title'], required=required, type=NUMBER)
@@ -99,6 +101,7 @@ class GNS3_GUI():
 
             if result:
                 data[key] = self.val(result)
+
         return data
 
     def val(self,value):
@@ -107,6 +110,7 @@ class GNS3_GUI():
             val = int(value)
         except ValueError:
             val = str(value)
+
         return val
 
 
